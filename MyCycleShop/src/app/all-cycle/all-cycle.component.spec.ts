@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CycleAddComponent } from './cycle-add.component';
+import { AllCycleComponent } from './all-cycle.component';
 
-describe('CycleAddComponent', () => {
-  let component: CycleAddComponent;
-  let fixture: ComponentFixture<CycleAddComponent>;
+describe('AllCycleComponent', () => {
+  let component: AllCycleComponent;
+  let fixture: ComponentFixture<AllCycleComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CycleAddComponent]
+      declarations: [AllCycleComponent]
     });
-    fixture = TestBed.createComponent(CycleAddComponent);
+    fixture = TestBed.createComponent(AllCycleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

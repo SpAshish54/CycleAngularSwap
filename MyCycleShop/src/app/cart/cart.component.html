@@ -1,0 +1,9 @@
+<h2>My Cart: </h2>
+<ul>
+    <li *ngFor="let item of items">
+        <span>{{item.id}}</span>
+        <span>{{item.cycle.brand}}</span>
+        <span>{{item.quantity}}</span>
+    </li>
+    <button type="button" (click)="checkout()">Check Out</button>
+</ul>

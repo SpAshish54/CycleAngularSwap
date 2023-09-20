@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CycleListComponent } from './cycle-list/cycle-list.component';
-import { CycleAddComponent } from './cycle-add/cycle-add.component';
-import { HttpClientModule } from '@angular/common/http';
+import { AllCycleComponent } from './all-cycle/all-cycle.component';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CartComponent } from './cart/cart.component';
+
 @NgModule({
   declarations: [
     AppComponent,
-    CycleListComponent,
-    CycleAddComponent,
+    AllCycleComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    FormsModule
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

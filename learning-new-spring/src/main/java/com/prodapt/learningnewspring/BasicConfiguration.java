@@ -69,7 +69,7 @@ public class BasicConfiguration {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/api/register","/api/***", "/api/auth/token").permitAll()
+            .requestMatchers("/api/register","/api/**", "/api/auth/token").permitAll()
             //.requestMatchers("/api/{id}/restock", "/api/auth/token").hasAuthority("SCOPE_ROLE_ADMIN")
             .anyRequest().authenticated())
             .logout(withDefaults())

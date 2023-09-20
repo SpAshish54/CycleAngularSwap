@@ -4,6 +4,7 @@ package com.prodapt.learningnewspring.controller;
 import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
  
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prodapt.learningnewspring.Repository.UserRepository;
+import com.prodapt.learningnewspring.entity.CartItem;
 import com.prodapt.learningnewspring.entity.Cycle;
 import com.prodapt.learningnewspring.entity.User;
 import com.prodapt.learningnewspring.service.CycleService;
@@ -55,8 +57,7 @@ public class CycleRestController {
 
     @GetMapping("/cycle/list")
     public List<Cycle> all(Authentication authentication) {
-        //Jwt jwt = (Jwt) authentication.getPrincipal();
-        //System.out.println(jwt.getClaimAsString("scope"));
+        System.out.println("Here");
         return cycleService.listAvailableCycles();
     }
     
@@ -77,16 +78,41 @@ public class CycleRestController {
         cycleService.restockBy(id, count);
         return new ResponseEntity<>("Cycles restocked successfully", HttpStatus.OK);
     }
+
+    @PostMapping("/addToCart")
+    public ResponseEntity<String> addToCart(@RequestBody Map<String, Integer> reqBody){
+        int userId = reqBody.get("userId");
+        int cycleId = reqBody.get("cycleId");
+        int count = reqBody.get("count");
+        cycleService.AddToCart(userId, cycleId, count);
+        return new ResponseEntity<>("Added To Cart!", HttpStatus.OK);
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkout(@RequestBody Map<String, Integer> reqBody){
+        int userId = reqBody.get("userId");
+        cycleService.borrowCyclesFromCart(userId);
+        return new ResponseEntity<>("Checked Out!", HttpStatus.OK);
+    }
+
+    @GetMapping("/getCart/{userId}")
+    public List<CartItem> getCart(@PathVariable Long userId){
+        return cycleService.getCart(userId);
+    }
+
+
+
+
     
     
     @GetMapping("/registration")
     public String registrationForm(Model model) {
        return "userRegistration";
-
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
+        System.out.println("Registering");
       try {
             if (userRepository.existsByName(user.getName())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username already exists");
