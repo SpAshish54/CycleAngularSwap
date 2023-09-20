@@ -6,12 +6,18 @@ import { AppComponent } from './app.component';
 import { AllCycleComponent } from './all-cycle/all-cycle.component';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CartComponent } from './cart/cart.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { BorrowedListComponent } from './borrowed-list/borrowed-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AllCycleComponent,
-    CartComponent
+    CartComponent,
+    LoginFormComponent,
+    NavBarComponent,
+    BorrowedListComponent
   ],
   imports: [
     BrowserModule,

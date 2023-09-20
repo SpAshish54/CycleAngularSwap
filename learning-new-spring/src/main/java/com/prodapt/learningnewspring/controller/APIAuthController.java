@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prodapt.learningnewspring.TokenDTO;
 import com.prodapt.learningnewspring.business.LoginBody;
 
 import jakarta.annotation.Resource;
@@ -34,7 +35,7 @@ public class APIAuthController {
     AuthenticationManager authenticationManager;
 
     @PostMapping("/token")
-    public String token(@RequestBody LoginBody loginBody) {
+    public TokenDTO token(@RequestBody LoginBody loginBody) {
         Instant now = Instant.now();
         long expiry = 3600L;
         var username = loginBody.getUsername();
@@ -51,8 +52,10 @@ public class APIAuthController {
 				.subject(authentication.getName())
 				.claim("scope", scope)
 				.build();
-
-        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        TokenDTO t = new TokenDTO();
+        t.setToken(this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue());
+        t.setUsername(authentication.getName());
+        return t;
     }
 
 }

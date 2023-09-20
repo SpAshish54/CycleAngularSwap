@@ -1,11 +1,23 @@
 <h2>All Cycles: </h2>
-<ul>
-    <li *ngFor="let cycle of cycles">
-        <span>{{cycle.id}}</span>
-        <span>{{cycle.brand}}</span>
-        <span>{{cycle.stock}}</span>
-        <span>{{cycle.rent}}</span>
-        <button type="button" (click)="addToCart(cycle.id, count.value)">Add To Cart</button>
-        <input type="number" name="count" id="count" #count>
-    </li>
-</ul>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Stock</th>
+            <th>Rent</th>
+            <th>Add To Cart</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let cycle of cycles">
+            <td>{{ cycle.id }}</td>
+            <td>{{ cycle.brand }}</td>
+            <td>{{ cycle.stock }}</td>
+            <td>{{ cycle.rent }}</td>
+            <td><button type="button" (click)="addToCart(cycle.id, count.value)">Add To Cart</button></td>
+            <td><input type="number" value="1" name="count" id="count" #count></td>
+        </tr>
+    </tbody>
+</table>

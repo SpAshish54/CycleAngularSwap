@@ -10,19 +10,24 @@ import { CycleService } from '../cycle.service';
 export class CartComponent {
   items: CartItem[] = [];
 
+  total: number = 0;
+
   constructor(private cycleService: CycleService) {}
 
   ngOnInit() {
-    this.cycleService.getCart(1).subscribe(res => {
+    this.cycleService.getCart(localStorage.getItem("username")).subscribe(res => {
       this.items = res;
       console.log(this.items);
+      for(let item of this.items){
+        this.total += item.cost;
+      }
     });
   }
 
   checkout() {
-    this.cycleService.checkout(1).subscribe(res => {
+    this.cycleService.checkout(localStorage.getItem("username")).subscribe(res => {
       console.log(res);
-      this.ngOnInit();
     })
+    window.location.reload();
   }
 }

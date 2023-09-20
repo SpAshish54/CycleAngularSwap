@@ -2,6 +2,7 @@ package com.prodapt.learningnewspring.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,28 +84,28 @@ public class CycleService {
         cycleRepository.save(cycle);
     }
 
-    public void AddToCart(long userId, long cycleId, int quantity) {
+    public void AddToCart(String username, long cycleId, int quantity) {
         var cycle = findByIdOrThrow404(cycleId);
-        var user = userRepository.findById(userId);
+        var user = userRepository.findByName(username);
 
         if (user.isEmpty()) {
-            throw new CycleShopBusinessException(String.format("Can't find the user with id %d in the DB", userId));
+            throw new CycleShopBusinessException(String.format("Can't find the user with id %d in the DB", username));
         }
         if( cycle.getStock() - quantity > 0) {
         CartItem cartItem = new CartItem();
         cartItem.setCycle(cycle);
         cartItem.setUser(user.get());
         cartItem.setQuantity(quantity);
+        cartItem.setCost(quantity * cycle.getRent());
         cartItem.setCheckedOut(false);
         cartItemRepository.save(cartItem);
-        cycle.setStock(cycle.getStock() - quantity);
         cycleRepository.save(cycle);
         }
     }
 
-    public void borrowCyclesFromCart(long userId) {
+    public void borrowCyclesFromCart(String username) {
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findByName(username).get();
         List<CartItem> cartItems = cartItemRepository.findAllByUser(user);
 
         for (CartItem cartItem : cartItems) {
@@ -117,15 +118,21 @@ public class CycleService {
                 BorrowedCycle borrowedCycle = new BorrowedCycle();
                 borrowedCycle.setCycle(cartItem.getCycle());
                 borrowedCycle.setUser(user);
+                borrowedCycle.setQuantity(cartItem.getQuantity());
+                borrowedCycle.setCost(cartItem.getCost());
                 borrowedCycleRepository.save(borrowedCycle);
+
+                Cycle c = cartItem.getCycle();
+                c.setStock(c.getStock() - cartItem.getQuantity());
+                cycleRepository.save(c);
             }
         }
     }
 
-    public List<CartItem> getCart(long userId) {
-        var user = userRepository.findById(userId);
+    public List<CartItem> getCart(String username) {
+        var user = userRepository.findByName(username);
         if (user.isEmpty()) {
-            throw new CycleShopBusinessException(String.format("Can't find the user with id %d in the DB", userId));
+            throw new CycleShopBusinessException(String.format("Can't find the user with id %d in the DB", username));
         }
         List<CartItem> cartItems = cartItemRepository.findAllByUser(user.get());
 
@@ -137,5 +144,10 @@ public class CycleService {
         }
         return nonChecked;
     }
+
+    public List<BorrowedCycle> getAllBorrowedCycles(String username) {
+        User user = userRepository.findByName(username).get();
+		return (List<BorrowedCycle>) borrowedCycleRepository.findAllByUser(user);
+	}
 
 }

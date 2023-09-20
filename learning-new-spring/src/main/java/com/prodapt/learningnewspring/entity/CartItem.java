@@ -28,5 +28,7 @@ public class CartItem {
 
     private int quantity;
 
+    private int cost;
+
     private boolean isCheckedOut = false;
 }

@@ -1,6 +1,5 @@
 package com.prodapt.learningnewspring;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,16 +43,19 @@ import com.prodapt.learningnewspring.service.*;
 public class BasicConfiguration {
 
     @Value("${jwt.public.key}")
-	RSAPublicKey key;
+    RSAPublicKey key;
 
-	@Value("${jwt.private.key}")
-	RSAPrivateKey priv;
-    
+    @Value("${jwt.private.key}")
+    RSAPrivateKey priv;
+
     @Autowired
     private CustomUserDetailsService userDetailsService;
-    
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
+    private CorsConfig corsConfig;
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
     }
 
@@ -62,47 +64,45 @@ public class BasicConfiguration {
         return userDetailsService;
     }
 
-    
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests((requests) -> requests
-            .requestMatchers("/api/register","/api/**", "/api/auth/token").permitAll()
-            //.requestMatchers("/api/{id}/restock", "/api/auth/token").hasAuthority("SCOPE_ROLE_ADMIN")
-            .anyRequest().authenticated())
-            .logout(withDefaults())
-            .httpBasic(withDefaults())
-            //.formLogin(withDefaults())
-            .oauth2ResourceServer(
-                oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> 
-                                                                    jwt.decoder(jwtDecoder())))
-            .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .exceptionHandling((exceptions) -> exceptions
-            .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-            .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
-    );
-        
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfig))
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api/register", "/api/auth/token")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .logout(withDefaults())
+                .httpBasic(withDefaults())
+                // .formLogin(withDefaults())
+                .oauth2ResourceServer(
+                        oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.decoder(jwtDecoder())))
+                .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling((exceptions) -> exceptions
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+
         return http.build();
     }
 
     @Bean
-	JwtEncoder jwtEncoder() {
-        
+    JwtEncoder jwtEncoder() {
+
         JWK jwk = new RSAKey.Builder(this.key).privateKey(this.priv).build();
-		JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-		return new NimbusJwtEncoder(jwks);
-	}
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwks);
+    }
 
     @Bean
-	JwtDecoder jwtDecoder() {
-		return NimbusJwtDecoder.withPublicKey(this.key).build();
-	}
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(this.key).build();
+    }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    
+
 }

@@ -1,4 +1,4 @@
-<h2>My Cart: </h2>
+<h2>Borrowed Cycles: </h2>
 <table>
     <thead>
         <tr>
@@ -9,7 +9,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let item of items">
+        <tr *ngFor="let item of borrowedList">
             <td>{{ item.id }}</td>
             <td>{{ item.cycle.brand }}</td>
             <td>{{ item.quantity }}</td>
@@ -17,5 +17,3 @@
         </tr>
     </tbody>
 </table>
-<h4>Total Cost: {{total}}</h4>
-<button type="button" (click)="checkout()">Check Out</button>

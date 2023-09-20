@@ -29,5 +29,7 @@ public class BorrowedCycle {
 
     private int quantity;
 
+    private int cost;
+
     private Date borrowedAt;
 }

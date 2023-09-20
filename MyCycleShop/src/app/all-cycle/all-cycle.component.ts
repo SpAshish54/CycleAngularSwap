@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { cycle } from '../cycle';
 import { CycleService } from '../cycle.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-cycle',
@@ -10,7 +11,7 @@ import { CycleService } from '../cycle.service';
 export class AllCycleComponent {
   cycles: cycle[] = [];
 
-  constructor(private cycleService: CycleService) {}
+  constructor(private cycleService: CycleService, private router: Router) {}
 
   ngOnInit() {
     this.cycleService.findAll().subscribe(res => {
@@ -20,9 +21,9 @@ export class AllCycleComponent {
   }
 
   addToCart(cycleId: number, count: string) {
-    console.log(cycleId);
-    this.cycleService.addToCart(1, cycleId, parseInt(count)).subscribe(res => {
+    this.cycleService.addToCart(localStorage.getItem("username"), cycleId, parseInt(count)).subscribe(res => {
       console.log(res);
     });
+    window.location.reload();
   }
 }

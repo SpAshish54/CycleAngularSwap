@@ -1,35 +1,52 @@
-h2 {
-    font-family: Arial, sans-serif;
-    font-size: 24px;
-    color: #333333;
-    margin-bottom: 10px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #cccccc;
-    padding: 10px;
-  }
-  
-  span {
-    flex: 1;
-  }
-  
-  button {
-    background-color: #0099ff;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+ 
+
+ 
+th {
+    background-color: #f2f2f2;
+    text-align: left;
+    padding: 8px;
+}
+
+ 
+
+ 
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+ 
+
+tr:hover {
+    background-color: #ddd;
+}
+
+ 
+
+/* Style table cells */
+td {
+    padding: 8px;
+}
+
+ 
+
+/* Style the "Add To Cart" button */
+button {
+    background-color: #008CBA;
     color: white;
     border: none;
-    border-radius: 5px;
     padding: 5px 10px;
-  }
-  
-  input {
-    width: 50px;
-  }
-  
+    cursor: pointer;
+}
+
+ 
+
+/* Style the quantity input */
+input[type="number"] {
+    width: 40px;
+}
