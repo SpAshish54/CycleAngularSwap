@@ -70,7 +70,7 @@ public class BasicConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfig))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/register", "/api/auth/token")
+                        .requestMatchers("/api/register", "/api/auth/token", "/api/cycle/list")
                         .permitAll()
                         .anyRequest().authenticated())
                 .logout(withDefaults())

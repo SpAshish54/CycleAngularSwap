@@ -10,6 +10,11 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BorrowedListComponent } from './borrowed-list/borrowed-list.component';
 
+import { AuthModule } from '@auth0/auth0-angular';
+import { AuthButtonComponent } from './auth-button/auth-button.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,10 +22,20 @@ import { BorrowedListComponent } from './borrowed-list/borrowed-list.component';
     CartComponent,
     LoginFormComponent,
     NavBarComponent,
-    BorrowedListComponent
+    BorrowedListComponent,
+    AuthButtonComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
+    // Import the module into the application, with configuration
+    AuthModule.forRoot({
+      domain: 'dev-vxh7waiqj3mdbb7n.us.auth0.com',
+      clientId: 'KvfVSXNB6BGRcifGcM7do31rkgcgMkX9',
+      authorizationParams: {
+        redirect_uri: window.location.origin
+      }
+    }),
     AppRoutingModule,
     HttpClientModule
   ],

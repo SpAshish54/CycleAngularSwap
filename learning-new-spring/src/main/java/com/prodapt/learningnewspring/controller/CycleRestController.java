@@ -47,7 +47,7 @@ public class CycleRestController {
     }
 
     @GetMapping("/cycle/list")
-    public List<Cycle> all(Authentication authentication) {
+    public List<Cycle> all() {
         return cycleService.listAvailableCycles();
     }
 

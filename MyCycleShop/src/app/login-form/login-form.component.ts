@@ -10,7 +10,7 @@ export class LoginFormComponent {
 
   constructor(private authService: AuthService) {}
 
-  login(username: string, password: string) : void {
+  login(username: any, password: any) : void {
     this.authService.login(username, password).subscribe();
     window.location.href = "http://localhost:4200";
   }

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { cycle } from '../cycle';
 import { CycleService } from '../cycle.service';
 import { Router } from '@angular/router';
+import { AuthService } from '@auth0/auth0-angular';
+import { AuthService as AS } from '../auth.service';
 
 @Component({
   selector: 'app-all-cycle',
@@ -11,13 +13,20 @@ import { Router } from '@angular/router';
 export class AllCycleComponent {
   cycles: cycle[] = [];
 
-  constructor(private cycleService: CycleService, private router: Router) {}
+  constructor(private cycleService: CycleService, private router: Router, private authService: AuthService, private myAuthService: AS) {}
 
   ngOnInit() {
     this.cycleService.findAll().subscribe(res => {
       this.cycles = res;
-      console.log(this.cycles);
     });
+    this.authService.user$.subscribe(user => {
+      this.myAuthService.login(user?.email, user?.email).subscribe(res => {
+        if(res['username'] == null){
+          this.myAuthService.register(user?.email, user?.email).subscribe(res => {
+          });
+        }
+      });
+    })
   }
 
   addToCart(cycleId: number, count: string) {

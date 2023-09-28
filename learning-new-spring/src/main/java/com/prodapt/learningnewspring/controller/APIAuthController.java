@@ -40,7 +40,13 @@ public class APIAuthController {
         long expiry = 3600L;
         var username = loginBody.getUsername();
         var password = loginBody.getPassword();
+        try {
+          Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch(Exception e) {
+          return new TokenDTO();
+        }
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        System.out.println(20202);
         String scope = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(" "));
